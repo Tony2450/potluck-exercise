@@ -10,35 +10,71 @@ const guestList = document.querySelector(".guest-list");
 const guestCount = document.querySelector(".attendance");
 // alert when guest list is full (not yet visible)
 const guestFull = document.querySelector(".alert");
+// assign dishes button appears once guest list full
+const assignButton = document.querySelector(".assign")
+// list with guest names and assigned dish
+const assignedItems = document.querySelector(".assigned-items")
 
 const updateGuestCount = function () {
     const guests = document.querySelectorAll(".guest-list li");
     guestCount.innerText = guests.length;
-  
+
     if (guests.length === 8) {
-      addGuestButton.classList.add("hide");
-      guestInput.classList.add("hide");
-      guestInputLabel.classList.add("hide");
-      guestFull.classList.remove("hide");
+        addGuestButton.classList.add("hide");
+        guestInput.classList.add("hide");
+        guestInputLabel.classList.add("hide");
+        guestFull.classList.remove("hide");
     }
-  };
-  
-  const addToList = function (guest) {
+};
+
+const assignItems = function () {
+    let potluckItems = [
+        "hummus",
+        "cookies",
+        "bruchetta",
+        "sushi",
+        "cake",
+        "pasta",
+        "potato salad",
+        "ham sandwich",
+        "burrito",
+        "fruit",
+        "salad",
+        "pizza"
+    ]
+    let allGuests = document.querySelectorAll(".guest-list li")
+
+    for (let guest of allGuests){
+        let randomPotluckIndex = Math.floor(Math.random() * potluckItems.length)
+        let randomPotluckItem = potluckItems[randomPotluckIndex];
+        let listItem = document.createElement("li");
+        listItem.innerText = `${guest.innerText} is bringing ${randomPotluckItem}.`;
+        assignedItems.append(listItem);
+        potluckItems.splice(randomPotluckIndex, 1);
+    }
+}
+
+assignButton.addEventListener("click", function(){
+    assignItems();
+    assignButton.disabled = true;
+})
+
+const addToList = function (guest) {
     const listItem = document.createElement("li");
     listItem.innerText = guest;
     guestList.append(listItem);
-  };
-  
-  const clearInput = function () {
+};
+
+const clearInput = function () {
     guestInput.value = "";
-  };
-  
-  addGuestButton.addEventListener("click", function () {
+};
+
+addGuestButton.addEventListener("click", function () {
     const guest = guestInput.value;
     if (guest !== "") {
-      addToList(guest);
-      updateGuestCount();
-      clearInput();
+        addToList(guest);
+        updateGuestCount();
+        clearInput();
     }
-  });
+});
 
